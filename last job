@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>avtoris</title>
+</head>
+<body>
+	<textarea id = "username" placeholder="Введите имя"></textarea> 
+	<textarea id = "password" placeholder="Введите пароль"></textarea> 
+	<button onclick="register()">Register</button> 
+	<button onclick="login()">Login</button> 
+
+	<script type="text/javascript">
+
+	let usernames = JSON.parse(localStorage.getItem("usernames")) || []; //JSON.parse является глобальной функцией, предназначенной для анализа (парсинга) строк.
+  let passwords = JSON.parse(localStorage.getItem("passwords")) || []; //LocalStorage представляет хранилище для данных на постоянной основе. getItem синтаксис для содержания имени ключа в (), значение которого вы хотите получить. || логического ИЛИ. [] массив. 
+
+  function register() {
+    let username = document.getElementById("username").value; //document.getElementById Возвращает ссылку на элемент по его идентификатору. value задает значение по умолчанию для поля ввода.
+    let password = document.getElementById("password").value; 
+
+
+    let isUsernameTaken = usernames.includes(username); //проверка взят ли username.
+    let isPasswordValid = password.length >= 4 && password.length <= 12; //проверяем, валидный ли пароль.
+
+    if (!isUsernameTaken && isPasswordValid) {
+      usernames.push(username);
+      passwords.push(password);
+      localStorage.setItem("usernames", JSON.stringify(usernames)); //JSON.stringify глобальной функцией, предназначенной для преобразования элементарных значений, объектов, или массивов в строку в формате JSON.
+      localStorage.setItem("passwords", JSON.stringify(passwords));
+      alert("Регистрация завершена."); //выводит на экран пользователя окно текстом.
+    } 
+	else {
+		if(isUsernameTaken){ //Проверка имени пользователя.
+			alert("Регистрация не завершена.Пароль не верный."); 
+		}
+		else{
+			alert("Регистрация не завершена. Пароль не соответствует правильности, проверьте чтобы он был не меньше 4 и не больше 12 символов.");
+		}
+    }
+  }
+
+  function login() {
+    let username = document.getElementById("username").value;
+    let password = document.getElementById("password").value;
+
+    let bool = 0; //булевого значения (true или false)
+
+	for(let i = 0; i <= usernames.length && i <= passwords.length; i++){  //i используется для выделения части текста, которая должна отличатся от обычного текста. & условный оператор логического И. i++ увеличивает переменную на единицу.
+		if(username === usernames[i] && password === passwords[i]){ 
+			bool = 1;
+		}
+	}
+
+
+    if (bool === 1) {
+      alert("Успешный вход.");
+    } else {
+      alert("Вход не удался. Проверьте своё имя и пароль, возможно вам придется регистрироваться.");
+    }
+  }
+	</script>
+</body>
+</html>
